@@ -1,5 +1,7 @@
 # WebP to GIF High-Fidelity Converter
 
+[![Docker image](https://github.com/davidwushi1145/webp-gif-mvp/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/davidwushi1145/webp-gif-mvp/actions/workflows/docker-publish.yml)
+
 A lightweight, self-hosted web application for analyzing and converting static or animated WebP images to GIF. The browser UI, API, Sharp/libvips conversion pipeline, quality checks, and temporary job storage all run in one Next.js process and ship in a single Docker image.
 
 The converter is designed for small, trusted deployments where preserving animation timing and clean transparent edges matters more than raw throughput.
@@ -57,6 +59,35 @@ ports:
 
 > [!WARNING]
 > The application does not include user authentication. Do not expose it directly to the public internet without an authentication and rate-limiting layer.
+
+## Prebuilt container image
+
+A public multi-platform image for `linux/amd64` and `linux/arm64` is published to GitHub Container Registry on every push to `main`:
+
+```bash
+docker pull ghcr.io/davidwushi1145/webp-gif-mvp:latest
+```
+
+Run the published image:
+
+```bash
+docker run -d \
+  --name webp-gif-mvp \
+  --restart unless-stopped \
+  --memory=2g \
+  --cpus=2 \
+  -p 127.0.0.1:3000:3000 \
+  -v webp-gif-data:/app/data \
+  ghcr.io/davidwushi1145/webp-gif-mvp:latest
+```
+
+Available tags include:
+
+- `latest` for the current `main` branch
+- `sha-<commit>` for an immutable source revision
+- `<major>.<minor>.<patch>` and `<major>.<minor>` when a `v<major>.<minor>.<patch>` Git tag is pushed
+
+The package inherits this repository's public visibility, so pulling it does not require a GitHub login.
 
 ## Run with Docker
 
