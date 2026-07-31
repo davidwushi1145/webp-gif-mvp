@@ -1,0 +1,26 @@
+services:
+  webp-gif:
+    build:
+      context: .
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      JOB_ROOT: /app/data/jobs
+      NODE_OPTIONS: --max-old-space-size=512
+      MALLOC_ARENA_MAX: "2"
+      SHARP_CONCURRENCY: "1"
+      SHARP_CACHE_MEMORY_MB: "32"
+    volumes:
+      - webp-gif-data:/app/data
+    mem_limit: 2g
+    cpus: 2.0
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  webp-gif-data:
